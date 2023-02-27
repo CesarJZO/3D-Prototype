@@ -37,7 +37,7 @@ public partial class @PlayerActions : IInputActionCollection2, IDisposable
                     ""initialStateCheck"": true
                 },
                 {
-                    ""name"": ""CameraMove"",
+                    ""name"": ""Look"",
                     ""type"": ""Value"",
                     ""id"": ""bf78425c-c12b-46f7-96e6-52d930ebce9a"",
                     ""expectedControlType"": ""Vector2"",
@@ -120,7 +120,7 @@ public partial class @PlayerActions : IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""CameraMove"",
+                    ""action"": ""Look"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
@@ -131,7 +131,7 @@ public partial class @PlayerActions : IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""CameraMove"",
+                    ""action"": ""Look"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -143,7 +143,7 @@ public partial class @PlayerActions : IInputActionCollection2, IDisposable
         // Ground
         m_Ground = asset.FindActionMap("Ground", throwIfNotFound: true);
         m_Ground_Move = m_Ground.FindAction("Move", throwIfNotFound: true);
-        m_Ground_CameraMove = m_Ground.FindAction("CameraMove", throwIfNotFound: true);
+        m_Ground_Look = m_Ground.FindAction("Look", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -204,13 +204,13 @@ public partial class @PlayerActions : IInputActionCollection2, IDisposable
     private readonly InputActionMap m_Ground;
     private IGroundActions m_GroundActionsCallbackInterface;
     private readonly InputAction m_Ground_Move;
-    private readonly InputAction m_Ground_CameraMove;
+    private readonly InputAction m_Ground_Look;
     public struct GroundActions
     {
         private @PlayerActions m_Wrapper;
         public GroundActions(@PlayerActions wrapper) { m_Wrapper = wrapper; }
         public InputAction @Move => m_Wrapper.m_Ground_Move;
-        public InputAction @CameraMove => m_Wrapper.m_Ground_CameraMove;
+        public InputAction @Look => m_Wrapper.m_Ground_Look;
         public InputActionMap Get() { return m_Wrapper.m_Ground; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -223,9 +223,9 @@ public partial class @PlayerActions : IInputActionCollection2, IDisposable
                 @Move.started -= m_Wrapper.m_GroundActionsCallbackInterface.OnMove;
                 @Move.performed -= m_Wrapper.m_GroundActionsCallbackInterface.OnMove;
                 @Move.canceled -= m_Wrapper.m_GroundActionsCallbackInterface.OnMove;
-                @CameraMove.started -= m_Wrapper.m_GroundActionsCallbackInterface.OnCameraMove;
-                @CameraMove.performed -= m_Wrapper.m_GroundActionsCallbackInterface.OnCameraMove;
-                @CameraMove.canceled -= m_Wrapper.m_GroundActionsCallbackInterface.OnCameraMove;
+                @Look.started -= m_Wrapper.m_GroundActionsCallbackInterface.OnLook;
+                @Look.performed -= m_Wrapper.m_GroundActionsCallbackInterface.OnLook;
+                @Look.canceled -= m_Wrapper.m_GroundActionsCallbackInterface.OnLook;
             }
             m_Wrapper.m_GroundActionsCallbackInterface = instance;
             if (instance != null)
@@ -233,9 +233,9 @@ public partial class @PlayerActions : IInputActionCollection2, IDisposable
                 @Move.started += instance.OnMove;
                 @Move.performed += instance.OnMove;
                 @Move.canceled += instance.OnMove;
-                @CameraMove.started += instance.OnCameraMove;
-                @CameraMove.performed += instance.OnCameraMove;
-                @CameraMove.canceled += instance.OnCameraMove;
+                @Look.started += instance.OnLook;
+                @Look.performed += instance.OnLook;
+                @Look.canceled += instance.OnLook;
             }
         }
     }
@@ -243,6 +243,6 @@ public partial class @PlayerActions : IInputActionCollection2, IDisposable
     public interface IGroundActions
     {
         void OnMove(InputAction.CallbackContext context);
-        void OnCameraMove(InputAction.CallbackContext context);
+        void OnLook(InputAction.CallbackContext context);
     }
 }
