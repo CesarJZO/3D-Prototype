@@ -4,6 +4,7 @@
 public class Player : MonoBehaviour
 {
     [SerializeField] private float speed;
+    [SerializeField] private float turnSpeed;
     [SerializeField] private new Rigidbody rigidbody;
     private PlayerActions _playerActions;
     private Camera _camera;
@@ -48,5 +49,7 @@ public class Player : MonoBehaviour
 
         var moveDirection = Vector3.ClampMagnitude(cameraRelativeDirection, 1f);
         rigidbody.velocity = moveDirection * speed;
+
+        transform.forward = Vector3.Slerp(transform.forward, moveDirection, turnSpeed);
     }
 }
