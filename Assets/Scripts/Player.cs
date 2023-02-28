@@ -6,14 +6,22 @@ public class Player : MonoBehaviour
     [SerializeField] private float speed;
     [SerializeField] private float turnSpeed;
     [SerializeField] private new Rigidbody rigidbody;
+
     private PlayerActions _playerActions;
     private Camera _camera;
+
+    private Vector3 _lastDirection;
 
     private void Awake()
     {
         _camera = Camera.main;
         _playerActions = new PlayerActions();
         if (!rigidbody) rigidbody.GetComponent<Rigidbody>();
+    }
+
+    private void Start()
+    {
+        _lastDirection = transform.forward;
     }
 
     private void OnEnable()
@@ -48,8 +56,11 @@ public class Player : MonoBehaviour
         var cameraRelativeDirection = forwardRelativeVerticalInput + rightRelativeHorizontalInput;
 
         var moveDirection = Vector3.ClampMagnitude(cameraRelativeDirection, 1f);
-        rigidbody.velocity = moveDirection * speed;
+        rigidbody.velocity = moveDirection * speed + Vector3.up * rigidbody.velocity.y;
 
-        transform.forward = Vector3.Slerp(transform.forward, moveDirection, turnSpeed);
+        if (moveDirection != Vector3.zero)
+            _lastDirection = moveDirection;
+
+        transform.forward = Vector3.Slerp(transform.forward, _lastDirection, turnSpeed);
     }
 }
